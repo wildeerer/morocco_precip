@@ -3,6 +3,59 @@ import xarray as xr
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import torch.nn as nn
+import torch
+
+class CustomLoss(nn.Module):
+    def __init__(self, minimum, maximum):
+        super(CustomLoss, self).__init__()
+        self.minimum = minimum
+        self.maximum = maximum
+
+    def calculate_weight(self, output):
+        weight = torch.zeros_like(output)
+        weight = torch.where(output <= self.minimum, self.minimum, weight)
+        weight = torch.where((output > self.minimum) & (output < self.maximum), output, weight)
+        weight = torch.where(output >= self.maximum, self.maximum, weight)
+        return weight
+
+
+    def forward(self, pred, true):
+        weights = self.calculate_weight(pred)
+        absolute_errors = torch.abs(pred - true)
+        weighted_errors = weights * absolute_errors
+
+        return torch.mean(weighted_errors)
+
+#https://www.codecademy.com/resources/docs/pytorch/custom-loss-functions-creation
+
+
+#Add in layer shapes
+class ResidualBlock(nn.Module):
+    def __init__(self, in_features, out_features):
+        super(ResidualBlock, self).__init__()
+        self.block1 = nn.Conv2d(in_features, 64, kernel_size=3)
+        self.block2 = nn.BatchNorm2d(64)
+        self.block3 = nn.ReLU()
+        self.block4 = nn.Conv2d(64, out_features)
+        self.block5 = nn.BatchNorm2d(out_features)
+
+    def forward(self, x):
+        x = self.block1(x)
+        x = self.block2(x)
+        x = self.block3(x)
+        x = self.block4(x)
+        return self.block5(x)
+
+
+class UpsamplingBlock(nn.Module):
+    def __init__(self, in_features, out_features):
+        super(UpsamplingBlock, self).__init__()
+        self.block1 = nn.Conv2d()
+        self.block2 = nn.UpsamplingBilinear2d()
+        self.block3 = nn.ReLU()
+
+
 
 
 class precip_postprocessing:
