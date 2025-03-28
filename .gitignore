@@ -2,6 +2,6 @@ data/raw/CHIRPS_1991_2021_MOR.nc
 data/raw/RAW_CFSv2_1991_2020_MOR.nc
 data/chirps_data.nc
 data/raw_precip_preds.nc
-notebooks/_pycache_/
+__pycache__
 01_eda.html
 .venv/
