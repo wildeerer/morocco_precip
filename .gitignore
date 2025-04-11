@@ -5,3 +5,4 @@ data/raw_precip_preds.nc
 __pycache__
 01_eda.html
 .venv/
+.ipynb_checkpoints/

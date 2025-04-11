@@ -94,15 +94,6 @@ class precip_postprocessing:
         self.location_dict = pd.DataFrame(d).T.reset_index()
         self.merged_df = 0
 
-
-    # def train_split(self, use_loc_dict = False):
-    #     if use_loc_dict == True:
-    #         self.X = self.
-
-    #     else:
-
-    
-
     def train(self):
         X_train, X_test, y_train, y_test = train_test_split()
 
